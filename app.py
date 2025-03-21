@@ -97,19 +97,6 @@ def home():
                            piechart_html = piechart_html)
 
 
-# @app.route('/admin', methods=['GET', 'POST'])
-# def admin():
-#     if request.method == 'POST':
-#         if 'file' not in request.files:
-#             return "No file part", 400
-#         file = request.files['file']
-#         if file.filename == '':
-#             return "No selected file", 400
-#         if file:
-#             filename = file.filename
-#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], "hr-dashbaord-data.xlsx"))
-#             return "File uploaded successfully", 200
-#     return render_template('admin.html')
 
 
 @app.route('/admin', methods=['GET', 'POST'])

@@ -15,7 +15,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def validate_user(user_id, password):
-    with open('D:/Projects/Rachna\'s Frontend/static/resources/user_credentials/login_credential.csv',
+    with open(r'/static/resources/user_credentials/login_credential.csv',
               mode='r') as file:
         reader = csv.DictReader(file)
         for row in reader:

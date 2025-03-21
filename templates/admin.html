@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <title>Admin Page</title>
+</head>
+<body>
+    <header class="header">
+        <img src="{{ url_for('static', filename='/images/En_logo/en_full_white.svg') }}" alt="Company Logo" class="company-logo">
+        <h1 class="header-title"></h1>
+        <div class="header-icons">
+            <a href="{{ url_for('login') }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" fill="white" class="bi bi-box-arrow-right" viewBox="0 0 16 16" stroke-width="5">
+                  <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a.5.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                  <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                </svg>
+            </a>
+        </div>
+    </header>
+    <div class="upload-section">
+        <form action="{{ url_for('admin') }}" method="POST" enctype="multipart/form-data">
+            <label for="file">Upload Excel File:</label>
+            <input type="file" id="file" name="file" accept=".xlsx, .xls"><br>
+            <button type="submit">Upload</button>
+        </form>
+
+        {% if upload_success is defined %}
+        <div class="upload-status {% if upload_success %}success{% else %}error{% endif %}">
+            <div class="status-icon">
+                {% if upload_success %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="check-icon">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                {% else %}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="x-icon">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                {% endif %}
+            </div>
+            <span class="status-message">
+                {% if upload_success %}
+                    File uploaded successfully!
+                {% else %}
+                    Upload failed. Please try again.
+                {% endif %}
+            </span>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,167 @@
+/* Reset some basic elements */
+body, h2, p, form, label, input, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Container styling */
+.admin-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+/* Header styling */
+.header {
+    margin-bottom: 30px;
+}
+
+h2 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 24px;
+}
+
+p {
+    color: #666;
+    font-size: 16px;
+}
+
+/* Upload section styling */
+.upload-section {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px; /* Added to account for fixed header */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+    margin-bottom: 10px;
+    color: #666;
+    font-size: 14px;
+}
+
+input[type="file"] {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 300px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    max-width: 150px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.header {
+    height: 50px; /* Set the height of the logo */
+    background-color: #23486A; /* Set the background color */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 15px 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+
+}
+
+.company-logo {
+    width: 210px;
+    height: auto;
+    position: absolute;
+    left: 5px;
+    top: -20px;
+}
+
+.bi.bi-box-arrow-right {
+    position: absolute;
+    right: 80px;
+    top: 28px;
+    font-weight: bold;
+    stroke-width: 2;
+    fill: white;
+    height: auto;
+    width: 35px;
+}
+
+/* Upload status styling */
+.upload-status {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    max-width: 300px;
+}
+
+.upload-status.success {
+    background-color: rgba(25, 135, 84, 0.1);
+    color: #198754;
+    border: 1px solid rgba(25, 135, 84, 0.2);
+}
+
+.upload-status.error {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.status-icon {
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.check-icon {
+    color: #198754;
+}
+
+.x-icon {
+    color: #dc3545;
+}
+
+.status-message {
+    font-weight: 500;
+}

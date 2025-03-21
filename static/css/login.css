@@ -1,0 +1,172 @@
+/* Base styles and modern reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(135deg, #6a8eae 0%, #e4efe9 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+/* Center the login container properly */
+.login-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+}
+
+/* Modern login container with softer shadows */
+.login-container {
+  position: relative;
+  height: 480px;
+  top: -10px;
+  width: 415px;
+  padding: 23px;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Logo styling */
+.company-logo {
+  width: 100px;
+  height: auto;
+  margin-bottom: 15px;
+}
+
+/* Login header */
+.login-header {
+  margin-bottom: 30px;
+}
+
+.login-header h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 10px;
+}
+
+/* Alert styling */
+.alert {
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.alert-danger {
+  background-color: #fff2f2;
+  border-left: 4px solid #f56565;
+  color: #c53030;
+}
+
+/* Form styling */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  background-color: #f8fafc;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #23486A;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+/* Button styles */
+.btn {
+  display: inline-block;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  line-height: 1.5;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+.btn-primary {
+  background-color: #23486A;
+  color: white;
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  background-color: #404040;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 117, 252, 0.2);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Improved footer positioning and styling */
+footer {
+  width: 100%;
+  text-align: center;
+  padding: 20px 0;
+  bottom: 0;
+  left: 0;
+}
+
+.footer-logo {
+  width: 140px;
+  height: auto;
+  margin-top: 8px;
+}
+
+/*footer p {
+  position: absolute;
+  top: 840px;
+  right: 930px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .login-container {
+    width: 90%;
+    padding: 30px 20px;
+  }
+}

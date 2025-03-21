@@ -9,18 +9,23 @@ from static.functions.Dashbaord_functions import read_excel_to_dict, totalActive
     employeeAverageGrowthRateCard, generate_professional_line_chart, generate_grouped_bar_chart, \
     employee_pie_chart, averageAttritionRateCard, activeEmployeeInDepartmentCard
 
-app = Flask(__name__)
-UPLOAD_FOLDER = 'D:/Projects/Rachna\'s Frontend/static/resources/uploads'
+
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static', 'resources', 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def validate_user(user_id, password):
-    with open(r'/static/resources/user_credentials/login_credential.csv',
-              mode='r') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            if row['user_id'] == user_id and row['password'] == password:
-                return row['access']
+    # Use a relative path based on app root
+    credentials_path = os.path.join(APP_ROOT, 'static', 'resources', 'user_credentials', 'login_credential.csv')
+    try:
+        with open(credentials_path, mode='r') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                if row['user_id'] == user_id and row['password'] == password:
+                    return row['access']
+    except FileNotFoundError:
+        print(f"Credentials file not found at: {credentials_path}")
     return None
 
 
@@ -46,7 +51,8 @@ def login_post():
 def home():
     global data_dictionary
 
-    excel_file_path = r"static/resources/uploads/hr-dashbaord-data.xlsx"
+    
+    excel_file_path = os.path.join(APP_ROOT, "static", "resources", "uploads", "hr-dashbaord-data.xlsx")
     data_dictionary = read_excel_to_dict(excel_file_path)
 
     default_month = pd.Timestamp('2025-02-01')  # Default month
@@ -122,4 +128,10 @@ def admin():
     return render_template('admin.html')
 
 if __name__ == '__main__':
+     # Print the paths to help with debugging
+    print(f"App root directory: {APP_ROOT}")
+    print(f"Upload folder: {app.config['UPLOAD_FOLDER']}")
+    credentials_path = os.path.join(APP_ROOT, 'static', 'resources', 'user_credentials', 'login_credential.csv')
+    print(f"Credentials path: {credentials_path}")
+    
     app.run(debug=True)

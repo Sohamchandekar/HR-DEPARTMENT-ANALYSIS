@@ -10,14 +10,14 @@ from static.functions.Dashbaord_functions import read_excel_to_dict, totalActive
     employee_pie_chart, averageAttritionRateCard, activeEmployeeInDepartmentCard
 
 
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_FOLDER = os.path.join(APP_ROOT, 'static', 'resources', 'uploads')
+app = Flask(__name__)
+UPLOAD_FOLDER = os.path.join('static', 'resources', 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def validate_user(user_id, password):
     # Use a relative path based on app root
-    credentials_path = os.path.join(APP_ROOT, 'static', 'resources', 'user_credentials', 'login_credential.csv')
+    credentials_path = os.path.join('static', 'resources', 'user_credentials', 'login_credential.csv')
     try:
         with open(credentials_path, mode='r') as file:
             reader = csv.DictReader(file)
@@ -52,7 +52,7 @@ def home():
     global data_dictionary
 
     
-    excel_file_path = os.path.join(APP_ROOT, "static", "resources", "uploads", "hr-dashbaord-data.xlsx")
+    excel_file_path = os.path.join("static", "resources", "uploads", "hr-dashbaord-data.xlsx")
     data_dictionary = read_excel_to_dict(excel_file_path)
 
     default_month = pd.Timestamp('2025-02-01')  # Default month
@@ -127,11 +127,5 @@ def admin():
 
     return render_template('admin.html')
 
-if __name__ == '__main__':
-     # Print the paths to help with debugging
-    print(f"App root directory: {APP_ROOT}")
-    print(f"Upload folder: {app.config['UPLOAD_FOLDER']}")
-    credentials_path = os.path.join(APP_ROOT, 'static', 'resources', 'user_credentials', 'login_credential.csv')
-    print(f"Credentials path: {credentials_path}")
-    
+if __name__ == '__main__':   
     app.run(debug=True)

@@ -3,7 +3,7 @@ import plotly
 import plotly.express as px
 import numpy as np
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
+import plotly.subplots as subplots
 
 def read_excel_to_dict(file_path):
     # Create an empty dictionary to hold all department data
@@ -35,6 +35,43 @@ def read_excel_to_dict(file_path):
     return all_departments_data
 
 
+import pandas as pd
+import ast
+
+
+def convert_active_employee_names(data):
+    # Iterate through each department
+    for department, months in data.items():
+        # Iterate through each month in the department
+        for month, values in months.items():
+            # Check if 'Active Employees Name ' exists in the current month's data
+            if 'active_employee_name' in values:
+                active_employees = values['active_employee_name']
+
+                # Check if the value is a string that looks like a list
+                if isinstance(active_employees, str):
+                    # Remove any leading/trailing whitespace
+                    active_employees = active_employees.strip()
+
+                    if active_employees.startswith('[') and active_employees.endswith(']'):
+                        # Remove the brackets
+                        active_employees = active_employees[1:-1]  # Remove the outer brackets
+                        # Split by comma and strip whitespace
+                        employee_list = [name.strip() for name in active_employees.split(',')]
+                        values['active_employee_name'] = employee_list
+                    elif active_employees == '[]':
+                        # If the string is '[]', convert it to an empty list
+                        values['active_employee_name'] = []
+                    else:
+                        # If it's not a valid list string, set it to an empty list
+                        values['active_employee_name'] = []
+                elif not isinstance(active_employees, list):
+                    # If it's neither a string nor a list, set it to an empty list
+                    values['active_employee_name'] = []
+
+    return data
+
+
 def totalActiveEmployeeCard(data_dictionary, selected_month):
     # Initialize total active employees count
     total_active_employees = 0
@@ -51,7 +88,7 @@ def totalActiveEmployeeCard(data_dictionary, selected_month):
 
     # Create an HTML card with the total active employees
     html_card = f"""
-    <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin: 10px; width: 200px;">
+    <div style="border-radius: 5px; padding: 10px; margin: 10px; width: 200px; height: 100px;">
         <h3>Overall Total Active Employees</h3>
         <p>Month: {selected_month.strftime('%B %Y')}</p>
         <h2>{total_active_employees}</h2>
@@ -96,8 +133,8 @@ def employeeAverageGrowthRateCard(data_dictionary, department_name):
 
         # Create an HTML card with the average growth rate for all departments
         html_card = f"""
-        <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin: 10px; width: 250px;">
-            <h3>Department wise Average Growth Rate</h3>
+        <div style="border-radius: 5px; padding: 10px; margin: 10px; width: 200px;">
+            <h3>Average Growth Rate</h3>
             <p>Department: {department_name}</p>
             <h2>{average_growth_rate_all_departments:.2f}%</h2>
         </div>
@@ -122,8 +159,8 @@ def employeeAverageGrowthRateCard(data_dictionary, department_name):
 
             # Create an HTML card with the average growth rate
             html_card = f"""
-            <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin: 10px; width: 250px;">
-                <h3>Department wise Average Growth Rate</h3>
+            <div style="border-radius: 5px; padding: 10px; margin: 10px; width: 250px;">
+                <h3>Average Growth Rate</h3>
                 <p>Department: {department_name}</p>
                 <h2>{average_growth_rate:.2f}%</h2>
             </div>
@@ -131,7 +168,7 @@ def employeeAverageGrowthRateCard(data_dictionary, department_name):
         else:
             # If the department does not exist, return an error message
             html_card = f"""
-            <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin: 10px; width: 250px;">
+            <div style="border-radius: 5px; padding: 10px; margin: 10px; width: 250px;">
                 <h3>Error</h3>
                 <p>Department '{department_name}' not found.</p>
             </div>
@@ -163,7 +200,7 @@ def averageAttritionRateCard(data, department_name):
 
         # Create an HTML card with the average retention rate
         html_card = f"""
-        <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin: 10px; width: 250px;">
+        <div style="border-radius: 5px; padding: 10px; margin: 10px; width: 250px;">
             <h3>Average Attrition Rate</h3>
             <p>Department: {department_name}</p>
             <h2>{average_attrition_rate:.2f}%</h2>
@@ -172,7 +209,7 @@ def averageAttritionRateCard(data, department_name):
     else:
         # If the department does not exist, return an error message
         html_card = f"""
-        <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin: 10px; width: 250px;">
+        <div style="border-radius: 5px; padding: 10px; margin: 10px; width: 250px;">
             <h3>Error</h3>
             <p>Department '{department_name}' not found.</p>
         </div>
@@ -199,8 +236,8 @@ def activeEmployeeInDepartmentCard(data, department, selected_month):
     # Create an HTML card with the active employee count
     if active_employee_count is not None:
         html_card = f"""
-        <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin: 10px; width: 200px;">
-            <h3>Department wise Active Employees</h3>
+        <div style="border-radius: 5px; padding: 10px; margin: 10px; width: 200px;">
+            <h3>Active Employees</h3>
             <p>Department: {department}</p>
             <p>Month: {selected_month.strftime('%B %Y')}</p>
             <h2>{active_employee_count}</h2>
@@ -208,7 +245,7 @@ def activeEmployeeInDepartmentCard(data, department, selected_month):
         """
     else:
         html_card = f"""
-        <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin: 10px; width: 200px;">
+        <div style="border-radius: 5px; padding: 10px; margin: 10px; width: 200px;">
             <h3>Active Employees in {department} Department</h3>
             <p>Month: {selected_month.strftime('%B %Y')}</p>
             <h2>No data available</h2>
@@ -519,11 +556,10 @@ def generate_grouped_bar_chart(data, department):
     return fig
 
 
-
 def employee_pie_chart(data, month):
     """
     Creates a professional pie chart showing the distribution of active employees
-    across different departments for a specified month using Plotly with an enhanced color palette.
+    across different departments for a specified month using Plotly.
 
     Parameters:
     - data: Dictionary containing department data with timestamps.
@@ -565,116 +601,129 @@ def employee_pie_chart(data, month):
     # Calculate percentages
     df['Percentage'] = df['Employees'] / total_employees * 100
 
-    # Custom rich color palette options - choose one of these
-    # Vibrant professional palette
-    color_palette2 = ['#2E5EAA', '#5E87B8', '#97A2C7', '#A4C2A5', '#5FAD56', '#F2C14E', '#F78154', '#B4436C', '#8F5DB3',
-                      '#3D3B8E']
-
-    # Choose which palette to use (you can easily switch between them)
-    selected_palette = color_palette2
+    # Professional color palette with softer, more sophisticated colors
+    color_palette = [
+        '#003f5c', '#2f4b7c', '#665191', '#a05195',
+        '#d45087', '#f95d6a', '#ff6e54', '#ffa600',
+        '#005694', '#0077be', '#1f77b4', '#4e79a7'
+    ]
 
     # If we have more departments than colors, cycle through the colors
-    if len(df) > len(selected_palette):
-        selected_palette = selected_palette * (len(df) // len(selected_palette) + 1)
-    colors = selected_palette[:len(df)]
+    if len(df) > len(color_palette):
+        color_palette = color_palette * (len(df) // len(color_palette) + 1)
+    colors = color_palette[:len(df)]
 
-    # Create the figure with subplots - one for pie chart, one for legend/stats
-    fig = make_subplots(
+    # Create figure with subplots
+    fig = subplots.make_subplots(
         rows=1, cols=2,
         specs=[[{"type": "domain"}, {"type": "table"}]],
         column_widths=[0.6, 0.4]
     )
 
-    # Add pie chart
+    # Pie Chart with improved styling
     fig.add_trace(
         go.Pie(
             labels=df['Department'],
             values=df['Employees'],
-            hole=0.4,  # Create a donut chart
-            marker=dict(colors=colors, line=dict(color='#FFFFFF', width=1.5)),
+            hole=0.5,  # Slightly smaller donut hole
+            marker=dict(
+                colors=colors,
+                line=dict(color='white', width=1.5)
+            ),
             textinfo='label+percent',
-            hoverinfo='label+value+percent',
-            textfont=dict(size=10, color='black', family="Arial, sans-serif"),  # Reduced font size
-            insidetextorientation='radial',
+            hovertemplate='<b>%{label}</b><br>Employees: %{value}<br>Percentage: %{percent}',
+            textfont=dict(size=9, color='white', family="Arial, sans-serif"),
+            insidetextorientation='tangential',
             pull=[0.05 if i == 0 else 0 for i in range(len(df))],  # Pull out largest segment
         ),
         row=1, col=1
     )
 
-    # Add table with department breakdown
+    # Enhanced Table with cleaner look
     fig.add_trace(
         go.Table(
             header=dict(
                 values=['Department', 'Employees'],
-                fill_color=selected_palette[0],  # Use first color from palette for header
-                align='left',
-                font=dict(size=14, color='white', family="Arial, sans-serif")
+                fill_color='#1F77B4',  # Use the first color from palette for header
+                align=['left', 'center', 'center'],
+                font=dict(size=12, color='white', family="Arial, sans-serif"),
+                line_color='white',
+                height=30
             ),
             cells=dict(
                 values=[
                     df['Department'],
-                    df['Employees']
+                    df['Employees'],
                 ],
-                fill_color=[['#F9F9F9'] * len(df)] * 2,
-                align=['left', 'center'],
-                font=dict(size=14, color='#333333', family="Arial, sans-serif"),
-                height=28
+                fill_color=[['#F0F4F8'] * len(df)] * 3,  # Soft blue-gray background
+                align=['left', 'center', 'center'],
+                font=dict(size=11, color='#333333', family="Arial, sans-serif"),
+                line_color='white',
+                height=25
             )
         ),
         row=1, col=2
     )
 
-    # Add a gradient background to the chart
+    # Refined Layout
     fig.update_layout(
         title={
-            'text': f'Active Employee Distribution: {selected_month.strftime("%B %Y")}',
-            'y': 0.98,
-            'x': 0.5,
+            'text': f'Employee Distribution: {selected_month.strftime("%B %Y")}',
+            'y': 0.96,
+            'x': 0.55,
             'xanchor': 'center',
             'yanchor': 'top',
-            'font': dict(family="Arial, sans-serif", size=22, color="#333333")
+            'font': dict(family="Arial, sans-serif", size=18, color="#333333")
         },
-        legend=dict(
-            orientation="v",
-            yanchor="middle",
-            y=0.5,
-            xanchor="right",
-            x=0.98,
-            font=dict(size=6, color="#333333", family="Arial, sans-serif")
-        ),
-        margin=dict(l=20, r=20, t=70, b=20),
-        paper_bgcolor='white',
-        plot_bgcolor='white',
-        width=1000,
-        height=600,
+        margin=dict(l=20, r=20, t=60, b=20),
+        paper_bgcolor="rgba(0,0,0,0.0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        width=800,  # Reduced width
+        height=450,  # Reduced height
+        showlegend=False,
         annotations=[
+            # Total Employees Annotation
             dict(
-                text=f"<b>Total<br>{total_employees}</b>",
-                x=0.21,
-                y=0.5,
-                font=dict(size=16, color='#333333', family="Arial, sans-serif"),
-                showarrow=False
-            ),
-            dict(
-                text=f"Data as of {selected_month.strftime('%d %b %Y')}",
-                x=0.5,
-                y=-0.05,
-                xref="paper",
-                yref="paper",
-                font=dict(size=10, color='#777777', family="Arial, sans-serif"),
+                text=f"Total Employees : {total_employees}<br>Departments : {len(df)}",
+                x=0.20,
+                y=0.49,
+                xref='paper',
+                yref='paper',
+                font=dict(size=11, color='#555555', family="Arial, sans-serif"),
                 showarrow=False
             )
-        ],
-        showlegend=False  # Hide legend since we're using table for details
-    )
 
-    # Add department count info
-    fig.add_annotation(
-        text=f"{len(df)} Departments",
-        x=0.21,
-        y=0.42,
-        font=dict(size=12, color='#777777', family="Arial, sans-serif"),
-        showarrow=False
+        ]
     )
 
     return fig
+
+def activeEmployeeTable(data, selected_month, selected_department):
+    # Convert the selected_month to a Timestamp
+    selected_date = pd.Timestamp(selected_month)
+
+    # Check if the selected department exists in the data
+    if selected_department not in data:
+        return f"Department '{selected_department}' not found."
+
+    # Get the department data
+    department_data = data[selected_department]
+
+    # Check if the selected date exists in the department data
+    if selected_date not in department_data:
+        return f"No data available for {selected_date.strftime('%Y-%m')} in department '{selected_department}'."
+
+    # Get the active employees for the selected date
+    active_employees = department_data[selected_date]['active_employee_name']
+
+    # Create a DataFrame for the active employees
+    if active_employees:
+        df = pd.DataFrame(active_employees, columns=['Employee Name'])
+        df.index += 1  # Start index from 1 for serial number
+    else:
+        return "No active employees found for the selected date."
+
+    # Convert the DataFrame to an HTML table
+    html_table = df.to_html(index=True, header=True)
+
+    return html_table

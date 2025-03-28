@@ -4,28 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-    <title>Employee Dashboard</title>
+    <title>Envision Next - HR Analytics Dashboard</title>
 </head>
 <body>
     <header class="header">
-        <img src="{{ url_for('static', filename='/images/En_logo/en_full_white.svg') }}" alt="Company Logo" class="company-logo">
-        <h1 class="header-title"></h1>
-        <div class="header-icons">
-            <a href="{{ url_for('login') }}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16" stroke-width="5">
-                  <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a.5.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
-                  <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
-                </svg>
-            </a>
+        <div class="header-container">
+            <img src="{{ url_for('static', filename='/images/En_logo/en_full_white.svg') }}" alt="Envision Next Logo" class="company-logo">
+
+            <div class="header-content">
+                <h1>ENVISION NEXT HR ANALYTICS</h1>
+                <p class="dashboard-subtitle">Comprehensive workforce insights and metrics</p>
+            </div>
+
+            <div class="header-icons">
+                <a href="{{ url_for('login') }}" class="logout-button" title="Logout">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a.5.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                      <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                    </svg>
+                </a>
+            </div>
         </div>
     </header>
 
-    <div class="main-content">
-        <div class="dashboard-intro">
-            <h2>ENVISION NEXT HR ANALYTICS</h2>
-        </div>
+    <main class="main-content">
+
 
         <section class="filter-section">
+            <div class="section-header">
+                <h2></h2>
+            </div>
             <form class="filter-form" method="post" action="{{ url_for('home') }}">
                 <div class="form-group">
                     <label for="selected_month">Select Month:</label>
@@ -47,31 +55,75 @@
                     </select>
                 </div>
 
-                <button type="submit">Apply Filters</button>
+                <button type="submit" class="btn-primary">Apply Filters</button>
             </form>
         </section>
 
-        <section class="card-container">
-            {{ active_employee_card|safe }}
-            {{ active_employee_in_department_card |safe }}
-            {{ growth_rate_card|safe }}
-            {{ retention_rate_card|safe }}
+        <section class="metrics-overview">
+
+            <div class="card-container">
+                <div class="card" id="active-employee">
+                    <div class="card-content">
+                        {{ active_employee_card | safe }}
+                    </div>
+                </div>
+
+                <div class="card" id="active-employee-department">
+                    <div class="card-content">
+                        {{ active_employee_in_department_card | safe }}
+                    </div>
+                </div>
+
+                <div class="card" id="growth-rate">
+                    <div class="card-content">
+                        {{ growth_rate_card | safe }}
+                    </div>
+                </div>
+
+                <div class="card" id="retention-rate">
+                    <div class="card-content">
+                        {{ retention_rate_card | safe }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="employee-table-container">
+                {{ active_employee_table | safe }}
+            </div>
         </section>
 
-        <section class="charts-container">
-            <div class="chart-container1">
-                <div class="line-chart">{{ linechart_html | safe }}</div>
+
+
+        <section class="data-visualization">
+
+            <div class="line-bar-container">
+
+                <div class="chart-container1" id="trend-chart">
+                    {{ linechart_html | safe }}
+                </div>
+
+                <div class="chart-container2" id="bar-chart">
+                    {{ barchart_html | safe }}
+                </div>
+
             </div>
-            <div class="chart-container2">
-                <div class="bar-chart">{{ barchart_html | safe }}</div>
+
+
+
+            <div class="pie-chart-container" >
+                <div class="chart-container" id="distribution-chart">
+                    {{ piechart_html | safe }}
+                </div>
             </div>
+
         </section>
 
-            <div class="chart-container pie-chart3">
-                <div class="pie-chart">{{ piechart_html | safe }}</div>
-            </div>
+    </main>
 
-
-    </div>
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Envision Next. All rights reserved.<br>-Team Analytics</p>
+        </div>
+    </footer>
 </body>
 </html>

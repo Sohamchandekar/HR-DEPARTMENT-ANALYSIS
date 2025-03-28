@@ -137,7 +137,12 @@ body {
 .btn-primary:active {
   transform: translateY(0);
 }
-
+.error-message {
+    color: red;
+    margin-top: -10px; /* Adjust this value to move the message up or down */
+    margin-bottom: 2px; /* Space between the error message and the button */
+    font-size: 0.9em; /* Adjust font size if needed */
+}
 /* Improved footer positioning and styling */
 footer {
   width: 100%;

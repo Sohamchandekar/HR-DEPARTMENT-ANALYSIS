@@ -1,14 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 import os
 import csv
 import pandas as pd
 from plotly.io import to_html
-from datetime import datetime
 
-from static.functions.Dashbaord_functions import read_excel_to_dict, totalActiveEmployeeCard, \
+
+from static.functions.Dashbaord_functions import read_excel_to_dict, convert_active_employee_names, totalActiveEmployeeCard, \
     employeeAverageGrowthRateCard, generate_professional_line_chart, generate_grouped_bar_chart, \
-    employee_pie_chart, averageAttritionRateCard, activeEmployeeInDepartmentCard
-
+    employee_pie_chart, averageAttritionRateCard, activeEmployeeInDepartmentCard, activeEmployeeTable
 
 app = Flask(__name__)
 UPLOAD_FOLDER = os.path.join('static', 'resources', 'uploads')
@@ -28,7 +27,6 @@ def validate_user(user_id, password):
         print(f"Credentials file not found at: {credentials_path}")
     return None
 
-
 @app.route('/')
 def login():
     return render_template('login.html')
@@ -44,16 +42,16 @@ def login_post():
     elif access == 'admin':
         return redirect(url_for('admin'))
     else:
-        return "Invalid credentials", 401
+        return render_template('login.html', error_message="Invalid username or password. Please try again.")
 
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     global data_dictionary
 
-    
     excel_file_path = os.path.join("static", "resources", "uploads", "hr-dashbaord-data.xlsx")
     data_dictionary = read_excel_to_dict(excel_file_path)
+    data_dictionary = convert_active_employee_names(data_dictionary)
 
     default_month = pd.Timestamp('2025-02-01')  # Default month
     selected_month = default_month
@@ -75,6 +73,8 @@ def home():
     retention_rate_card = averageAttritionRateCard(data_dictionary, department_name)
     active_employee_in_department_card = activeEmployeeInDepartmentCard(data_dictionary, department_name, selected_month)
 
+    active_employee_table = activeEmployeeTable(data_dictionary, selected_month, department_name)
+
     department_names = list(data_dictionary.keys())
     months = sorted({month for dept_data in data_dictionary.values() for month in dept_data.keys()})
 
@@ -94,6 +94,7 @@ def home():
                            growth_rate_card=growth_rate_card,
                            retention_rate_card=retention_rate_card,
                            active_employee_in_department_card = active_employee_in_department_card,
+                           active_employee_table = active_employee_table,
                            selected_month=selected_month.strftime('%Y-%m-%d'),
                            department_name=department_name,
                            department_names=department_names,
@@ -127,5 +128,5 @@ def admin():
 
     return render_template('admin.html')
 
-if __name__ == '__main__':   
+if __name__ == '__main__':
     app.run(debug=True)

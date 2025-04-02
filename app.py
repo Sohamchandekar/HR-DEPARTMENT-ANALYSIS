@@ -76,7 +76,11 @@ def home():
     active_employee_table = activeEmployeeTable(data_dictionary, selected_month, department_name)
 
     department_names = list(data_dictionary.keys())
-    months = sorted({month for dept_data in data_dictionary.values() for month in dept_data.keys()})
+    # months = sorted({month for dept_data in data_dictionary.values() for month in dept_data.keys()})
+    months = sorted({
+        pd.Timestamp(month) for dept_data in data_dictionary.values() for month in dept_data.keys()
+        if pd.notna(month) and isinstance(month, (pd.Timestamp, datetime.datetime))  # Keep only valid dates
+    })
 
     # Generate line chart
     linechart = generate_professional_line_chart(data_dictionary, department_name)
